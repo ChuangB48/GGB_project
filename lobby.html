@@ -8,7 +8,7 @@
     <body>
         <div id="ggb-container"></div>
         <script>
-            const socket=new WebSocket("ws://127.0.0.1:80");
+            const socket=new WebSocket("wss://ggb-project.onrender.com");
             let z=true;
             const applet=new GGBApplet({
                 appName: "graphing",
@@ -22,6 +22,15 @@
                     socket.onmessage=event=>{
                         ggbApi.evalCommand('SetValue(sum,'+event.data.toString()+')');
                         ggbApi.evalCommand('c:x^2+y^2='+((event.data)%100+1).toString());
+                        ggbApi.evalCommand('A=(4,'+(event.data%10).toString()+')');
+                        ggbApi.evalCommand('B=(3,'+(Math.floor(event.data/10)%10).toString()+')');
+                        ggbApi.evalCommand('C=(2,'+(Math.floor(event.data/100)%10).toString()+')');
+                        ggbApi.evalCommand('D=(1,'+(Math.floor(event.data/1000)%10).toString()+')');
+                        ggbApi.evalCommand('E=(0,'+(Math.floor(event.data/10000)%10).toString()+')');
+                        ggbApi.evalCommand('F=(-1,'+(Math.floor(event.data/100000)%10).toString()+')');
+                        ggbApi.evalCommand('G=(-2,'+(Math.floor(event.data/1000000)%10).toString()+')');
+                        ggbApi.evalCommand('H=(-3,'+(Math.floor(event.data/10000000)%10).toString()+')');
+                        ggbApi.evalCommand('I=(-4,'+(Math.floor(event.data/100000000)%10).toString()+')');
                         if(z){
                             ggbApi.evalCommand('d:y='+((event.data)%100).toString()+'*x');
                             z=!z;
@@ -30,9 +39,12 @@
                             ggbApi.evalCommand('d:y=-'+((event.data)%100).toString()+'*x');
                             z=!z;
                         }
+                        ggbApi.evalCommand('S=Text("'+event.data.toString()+'",(2,-3))');
                     }
                     ggbApi.evalCommand('sum=0');
                     document.addEventListener('keydown',e=>{
+                        if(e.code=='Space') ggbApi.evalCommand('Z=Text("'+e.code+'",(-2,-3))');
+                        else ggbApi.evalCommand('Z=Text("'+e.key+'",(-2,-3))');;
                         socket.send("a");
                     });
                 }
