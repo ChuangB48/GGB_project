@@ -9,17 +9,27 @@
         <div id="ggb-container"></div>
         <script>
             const socket=new WebSocket("ws://127.0.0.1:80");
+            let z=true;
             const applet=new GGBApplet({
                 appName: "graphing",
                 id: "myGgbApplet",
-                width: 1200,
-                height: 900,
+                width: 1068,
+                height: 801,
                 showToolBar: true,
                 showAlgebraInput: true,
                 showMenuBar: true,
                 appletOnLoad(ggbApi){
                     socket.onmessage=event=>{
                         ggbApi.evalCommand('SetValue(sum,'+event.data.toString()+')');
+                        ggbApi.evalCommand('c:x^2+y^2='+((event.data)%100+1).toString());
+                        if(z){
+                            ggbApi.evalCommand('d:y='+((event.data)%100).toString()+'*x');
+                            z=!z;
+                        }
+                        else{
+                            ggbApi.evalCommand('d:y=-'+((event.data)%100).toString()+'*x');
+                            z=!z;
+                        }
                     }
                     ggbApi.evalCommand('sum=0');
                     document.addEventListener('keydown',e=>{

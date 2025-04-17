@@ -8,8 +8,8 @@ const wss=new WebSocket({server});
 let t=0;
 wss.on("connection",ws=>{
     ws.on("message",data=>{
+        t++;
         wss.clients.forEach(function each(e){
-            t++;
             e.send(t.toString());
         });
     });
