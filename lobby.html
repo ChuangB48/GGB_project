@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>GGB</title>
+        <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    </head>
+    <body>
+        <div id="ggb-container"></div>
+        <script>
+            const applet = new GGBApplet({
+                appName: "graphing",
+                id: "myGgbApplet",
+                width: 1200,
+                height: 900,
+                showToolBar: true,
+                showAlgebraInput: true,
+                showMenuBar: true,
+                appletOnLoad(ggbApi) {
+                    ggbApi.evalCommand('sum=0');
+                    document.addEventListener('keydown',e=>{
+                        ggbApi.evalCommand('SetValue(sum,sum+1)');
+                    });
+                }
+            }, true);
+            window.addEventListener("load", () => {
+                applet.inject("ggb-container");
+            });
+        </script>
+    </body>
+</html>
